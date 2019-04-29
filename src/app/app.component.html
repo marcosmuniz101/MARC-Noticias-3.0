@@ -1,20 +1,179 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
+
+<ul class="nav justify-content-end">
+    <li class="nav-item">
+      <a class="nav-link active" href="#Inicio" (click)="Tela = 'Inicio'">Inicio</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#Publicar" (click)="Tela = 'Publicar'">Publicar</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#Cadastro" (click)="Tela = 'Cadastro'">Cadastro</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#Estatisticas" (click)="Tela = 'Estatisticas'" >Estatísticas</a>
+    </li>
+  </ul>
+
+
+<section *ngIf="Tela == 'Inicio'" id="Inicio" class="container">
+<div>
   <h1>
-    Welcome to {{ title }}!
+    Noticias <i class="fa fa-align-left btn-outline-success"></i>
+
   </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<br><br>
+<div class="container">
+      <table>
+        <tr *ngFor="let noticia of Noticias.ListaNoticiasPublicadas()">
+            <td><h5><i class="fa fa-file btn-outline-success" ></i> {{noticia.conteudo}}... </h5></td>
+  
+            <td><button class="btn btn-sm btn-outline-success"  type="button" (click)="Ler(noticia.id)"> Ler Noticia</button></td>
+            
+        </tr>
+      </table>
+    <br>
+   </div>
+<br>
+
+  <table>
+    <td><button type="button"  class="btn btn-outline-success" (click)="Tela = 'Publicar'"><i class="fa fa-check-circle"></i> Publicar </button></td>
+    <td><button type="button" class="btn btn-outline-danger " (click)="Tela = 'Cadastro'"><i class="fa fa-plus-circle"></i> Cadstrar</button></td>
+    <td><button type="button" class="btn btn-outline-warning " (click)="Tela = 'Estatisticas'"><i class="fa fa-bar-chart"></i> Estastísticas</button></td>
+    
+  </table>
+
+</section>
+
+<section *ngIf="Tela == 'Cadastro'" id="Cadastro" class="container">
+    <div>
+        <h1>
+          Cadastro <i class="fa fa-plus-circle btn-outline-danger"></i>
+        </h1>
+      </div>
+      <br><br>
+  <div class="container">
+
+    <form #FormCadastro="ngForm" (submit)="Salvar(FormCadastro)">        
+      <div class="form-group">
+            <label for="autor"><h5>Autor <i class="fa fa-user btn-outline-danger"></i></h5></label>
+            <select class="form-control" name="autor" id="autor" [(ngModel)]="autor" required>
+              <option disabled selected>Selecione um autor</option>
+              <option *ngFor="let autor of Noticias.ListaAutores() ">{{ autor.nome }}</option>
+            </select>
+          </div>
+
+      <div class="form-group">
+        <label for="conteudo"><h5> Conteúdo <i class="fa fa-align-left btn-outline-danger"></i></h5></label>
+        <textarea name="conteudo" id="conteudo" [(ngModel)]="conteudo" class="form-control" required> </textarea>
+        
+      </div>
+      <br>
+      <table>
+      <td><button class="btn btn-primary" type="submit" [disabled]="!FormCadastro.form.valid"> <i class="fa fa-save"></i> Salvar</button></td>
+      <td><button class="btn btn-info" type="reset" formnovalidate> <i class="fa fa-eraser"></i> Limpar</button></td>
+      <td><button type="button" class="btn btn-outline-danger" (click)="Tela = 'Inicio'">Fechar</button></td>
+    </table>
+    </form>
+  </div>
+
+</section>
+
+
+<section *ngIf="Tela == 'Publicar'" id="Publicar" class="container">
+    <div>
+        <h1>
+          Publicar Noticias <i class="fa fa-external-link btn-outline-primary"></i>
+        </h1>
+      </div>
+
+      <br><br>
+      <div class="container">
+            <table>
+              <tr *ngFor="let noticia of Noticias.ListaNoticiasNaoPublicadas()">
+                  <td><h5> <i class="fa fa-file btn-outline-primary" ></i> {{noticia.conteudo}}...  </h5></td>
+                  <td><button class="btn btn-sm btn-outline-primary"  type="button" (click)="Noticias.Publicar(noticia)">Publicar</button></td>
+                  
+              </tr>
+            </table>         
+         </div>
+         <br><br><br>
+         <div>
+           <button type="button" class="btn btn-outline-danger" (click)="Tela = 'Inicio'">Fechar</button>
+          </div>
+     
+</section>
+
+
+<section *ngIf="Tela=='Ler'" id="noticias" class="container">
+    <div>
+        <h1>
+         Boa Leitura
+        </h1>
+      </div>
+      
+      <div class="container">
+            <p>{{Noticias.NoticiaAtualConteudo}}</p>
+            <h6 >Publicado por:  {{Noticias.NoticiaAtualAutor}} </h6>
+
+      </div>
+
+
+      <br>
+      <br>
+      <button type="button" class="btn btn-outline-danger" (click)="Tela = 'Inicio'">Fechar</button>
+
+</section>
+
+
+<section *ngIf="Tela=='Estatisticas'" id="Estatisticas">
+
+  
+<div class="container">
+
+  <br><br>
+    <div class="row">
+      
+        <div class="col">
+            <fusioncharts 
+            width="600" 
+            height="400"
+            type="pie2d"
+            [dataSource]=Noticias.atualizaDataSource() >
+        </fusioncharts>    
+            </div>
+
+            <div class="col">
+                <h4>Autor com Mais publicações: </h4>
+                <br><br><br>
+                <div class="container"><h3>{{ Noticias.AutorMaisPubicou().nome }} <i class="fa fa-trophy btn-outline-warning"></i> </h3> </div>        
+                </div>
+      </div>
+
+    <br><br>
+
+    <h4 style="text-align: center">Ranking Top 5 noticias <i class="fa fa-star btn-outline-warning"></i> </h4>
+    <table class="table">
+      
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Views</th>
+            <th scope="col">Noticia</th>
+            <th scope="col">Autor</th>
+         
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let noticia of Noticias.Ranking()">
+            <th scope="row">{{ noticia.views }}</th>
+            <td>{{ noticia.conteudo }}</td>
+            <td>{{ noticia.autor }}</td>
+          </tr>          
+        </tbody>
+      </table>
+  </div>
+<br><br><br><br>
+ 
+
+</section>
 
